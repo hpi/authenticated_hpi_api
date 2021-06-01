@@ -1,0 +1,3 @@
+auth_my_api.egg-info
+__pycache__/*
+auth_my_api/__pycache__/
