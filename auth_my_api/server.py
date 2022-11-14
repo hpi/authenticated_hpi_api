@@ -39,6 +39,7 @@ def check_authentication(public_key, issuer):
   # Only enable authentication if the parameter is defined
   if public_key:
     auth_header = request.headers.get('Authorization')
+
     if auth_header:
       # Grab the token, ignore the auth type
       auth_token = auth_header.split(' ')[1]
@@ -48,12 +49,16 @@ def check_authentication(public_key, issuer):
     endpoint = ':'.join(request.base_url.split('/')[3:])
 
     try:
-      decoded_token = jwt.decode(auth_token, public_key, algorithms=["PS256"], options={
+      print(auth_token, '\n\n')
+      print(public_key, '\n\n')
+      print(jwt.get_unverified_header(auth_token))
+      decoded_token = jwt.decode(auth_token, public_key, algorithms=["ES256"], options={
         'verify_iat': True,
         'verify_exp': True,
         'verify_iss': True,
         }, issuer=issuer)
     except Exception as e:
+      print('fail', str(e))
       return { "error": "JWT decoded failed due to " + str(e) }
 
     claims = decoded_token['claims']
